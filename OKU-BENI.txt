@@ -1,0 +1,16 @@
+MAJOR BAKIM TAKIP - kurulum / kullanim
+
+KAYIT MANTIGI (Yedek Panel ile ayni): veriler index.html'in ICINDE saklanir. Otomatik kayit yoktur.
+- "HTML kaydet": Chrome/Edge bilgisayarda dosyanin uzerine yazar (kayit penceresi acilir); telefonda index.html indirilir.
+- "GitHub'a kaydet": panelin tamami (veriler icinde) depodaki index.html'in uzerine yazilir.
+- Kaydetmeden kapatirsaniz tarayici uyarir; kapatirsaniz degisiklikler silinir.
+
+GITHUB PAGES KURULUMU
+1) github.com'da yeni depo olusturun (orn. bakim-takip).
+2) Bu zip'teki TUM dosyalari (index.html, manifest.webmanifest, sw.js, icon-192.png, icon-512.png) depoya yukleyin.
+3) Depo > Settings > Pages > Deploy from a branch > main / (root) > Save.
+4) Adres: https://KULLANICI.github.io/bakim-takip/  - telefonda "Ana ekrana ekle" ile uygulama gibi yuklenir.
+5) Panel > Ayarlar > GitHub: depo "kullanici/bakim-takip", dal "main", dosya "index.html". Token: GitHub > Settings > Developer settings >
+   Fine-grained tokens > yalnizca bu depo, "Contents: Read and write". Ilk "GitHub'a kaydet"te token sorulur.
+
+UYARI: Depo/Pages herkese aciksa icindeki veriler ve fotograflar da herkese aciktir.
