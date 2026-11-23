@@ -1,4 +1,4 @@
-const C = 'major-bakim-v2';
+const C = 'major-bakim-v3';
 
 const F = [
   './',
