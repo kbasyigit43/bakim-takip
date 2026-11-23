@@ -1,5 +1,56 @@
-const C='bakim-v5',F=['./','index.html','manifest.webmanifest','icon-192.png','icon-512.png'];
-self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(F)).then(()=>self.skipWaiting()))});
-self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!=C).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
-self.addEventListener('fetch',e=>{const r=e.request;if(r.method!='GET'||new URL(r.url).origin!=location.origin)return;
- e.respondWith(fetch(r).then(res=>{if(res.ok&&!r.url.includes('data.json')){const cp=res.clone();caches.open(C).then(c=>c.put(r,cp))}return res}).catch(()=>caches.match(r).then(m=>m||caches.match('index.html'))))});
+
+const C = 'major-bakim-v1';
+
+const F = [
+  './',
+  'index.html',
+  'manifest.webmanifest',
+  'icon-192.png',
+  'icon-512.png'
+];
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(C)
+      .then(cache => cache.addAll(F))
+      .then(() => self.skipWaiting())
+  );
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys()
+      .then(keys =>
+        Promise.all(
+          keys
+            .filter(key => key.startsWith('major-bakim-') && key !== C)
+            .map(key => caches.delete(key))
+        )
+      )
+      .then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', event => {
+  const request = event.request;
+
+  if (
+    request.method !== 'GET' ||
+    new URL(request.url).origin !== location.origin
+  ) return;
+
+  event.respondWith(
+    fetch(request)
+      .then(response => {
+        if (response.ok && !request.url.includes('data.json')) {
+          const copy = response.clone();
+          caches.open(C).then(cache => cache.put(request, copy));
+        }
+        return response;
+      })
+      .catch(async () => {
+        const cache = await caches.open(C);
+        return await cache.match(request) || await cache.match('index.html');
+      })
+  );
+});
