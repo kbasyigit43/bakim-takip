@@ -893,5 +893,25 @@ const hh=()=>document.documentElement.style.setProperty('--hh',document.querySel
 document.getElementById('hlogo').src=document.querySelector('link[rel=icon]').href;document.getElementById('llogo').src=document.querySelector('link[rel=apple-touch-icon]').href;
 if(ENC)$('#lock').classList.add('on');
 ub();draw();ghq();hh();
-if(/^https?:/.test(location.protocol)&&'serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+if(/^https?:/.test(location.protocol)&&'serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').then(reg=>{
+    reg.addEventListener('updatefound',()=>{
+      const nw=reg.installing;
+      if(!nw)return;
+      nw.addEventListener('statechange',()=>{
+        if(nw.state==='installed'&&navigator.serviceWorker.controller){
+          if(confirm('Yeni güncelleme mevcut!\n\nİkon veya uygulama değişiklikleri var.\nŞimdi güncellemek ister misiniz?')){
+            nw.postMessage({type:'SKIP_WAITING'});
+          }
+        }
+      });
+    });
+  }).catch(()=>{});
+  let refreshing=false;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{
+    if(refreshing)return;
+    refreshing=true;
+    location.reload();
+  });
+}
 </script></body></html>
