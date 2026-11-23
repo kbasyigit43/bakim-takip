@@ -1,5 +1,4 @@
-
-const C = 'major-bakim-v1';
+const C = 'major-bakim-v2';
 
 const F = [
   './',
@@ -11,9 +10,7 @@ const F = [
 
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(C)
-      .then(cache => cache.addAll(F))
-      .then(() => self.skipWaiting())
+    caches.open(C).then(cache => cache.addAll(F))
   );
 });
 
@@ -50,7 +47,13 @@ self.addEventListener('fetch', event => {
       })
       .catch(async () => {
         const cache = await caches.open(C);
-        return await cache.match(request) || await cache.match('index.html');
+        return (await cache.match(request)) || (await cache.match('index.html'));
       })
   );
+});
+
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
